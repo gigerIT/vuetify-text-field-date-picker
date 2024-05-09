@@ -7,9 +7,7 @@ const locale = useLocale()
 
 <template>
   Vuetify Info
-<pre>
-<!--  Locale Current {{ locale.current }}-->
-</pre>
+  Locale Current {{ locale.current }}
 </template>
 
 <style scoped>
