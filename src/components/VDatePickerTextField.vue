@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import {computed, defineEmits, defineProps, ref, watch} from 'vue'
-import { DatePickerProps, TextFieldProps } from 'vuetify/types'
+
+import type { VTextField, VDatePicker } from 'vuetify/components'
+type UnwrapReadonlyArray<A> = A extends Readonly<Array<infer I>> ? I : A;
+
+// import { useLocale } from 'vuetify'
 
 const props = defineProps({
   modelValue: {
@@ -8,12 +12,17 @@ const props = defineProps({
     required: false
   },
   datePicker: {
-    type: Object as () => DatePickerProps,
+    type: Object as () => UnwrapReadonlyArray<VDatePicker>,
     required: false
   },
   textField: {
-    type: Object as () => TextFieldProps,
+    type: Object as () => UnwrapReadonlyArray<VTextField>,
     required: false
+  },
+  locale: {
+    type: String,
+    required: false,
+    default: 'en'
   }
 });
 
@@ -22,8 +31,9 @@ const emit = defineEmits('update:modelValue')
 const isMenuOpen = ref(false)
 const selectedDate = ref(props.modelValue)
 
+// const locale = useLocale()
 const formattedDate = computed(() => {
-  return selectedDate.value ? selectedDate.value.toLocaleDateString('de') : ''
+  return selectedDate.value ? selectedDate.value.toLocaleDateString(props.locale) : ''
 })
 
 watch(props.modelValue, newDate => {
@@ -32,9 +42,10 @@ watch(props.modelValue, newDate => {
 
 watch(selectedDate, newDate => {
   emit('update:modelValue', newDate)
-  setTimeout(function () {
-    isMenuOpen.value = false
-  }, 150)
+  isMenuOpen.value = false
+  // setTimeout(function () {
+  //   isMenuOpen.value = false
+  // }, 150)
 })
 </script>
 
