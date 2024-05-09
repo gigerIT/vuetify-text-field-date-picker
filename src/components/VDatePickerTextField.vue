@@ -1,21 +1,32 @@
-<script setup>
-import { ref, computed, watch, defineProps, defineEmits } from 'vue'
+<script setup lang="ts">
+import {computed, defineEmits, defineProps, ref, watch} from 'vue'
+import { DatePickerProps, TextFieldProps } from 'vuetify/types'
 
-const { label, color, modelValue } = defineProps([
-  'label',
-  'color',
-  'modelValue',
-])
+const props = defineProps({
+  modelValue: {
+    type: Date,
+    required: false
+  },
+  datePicker: {
+    type: Object as () => DatePickerProps,
+    required: false
+  },
+  textField: {
+    type: Object as () => TextFieldProps,
+    required: false
+  }
+});
+
 const emit = defineEmits('update:modelValue')
 
 const isMenuOpen = ref(false)
-const selectedDate = ref(modelValue)
+const selectedDate = ref(props.modelValue)
 
 const formattedDate = computed(() => {
   return selectedDate.value ? selectedDate.value.toLocaleDateString('de') : ''
 })
 
-watch(modelValue, newDate => {
+watch(props.modelValue, newDate => {
   selectedDate.value = newDate
 })
 
@@ -31,19 +42,15 @@ watch(selectedDate, newDate => {
   <v-menu v-model="isMenuOpen" :close-on-content-click="false">
     <template v-slot:activator="{ props }">
       <v-text-field
-          :label="label"
           :model-value="formattedDate"
           readonly
-          v-bind="props"
-          variant="outlined"
-          hide-details
+          v-bind="{...props, ...textField}"
       ></v-text-field>
     </template>
     <v-date-picker
         v-model="selectedDate"
         hide-actions
-        title="Test"
-        :color="color"
+        v-bind="datePicker"
     >
     </v-date-picker>
   </v-menu>
