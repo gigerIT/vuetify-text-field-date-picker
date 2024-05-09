@@ -28,9 +28,9 @@ export default defineConfig({
     lib: {
       // src/main.ts is where we have exported our component(s)
       entry: resolve(__dirname, "src/main.js"),
-      name: "VDatePickerTextField",
+      name: "VTextFieldDatePicker",
       // the name of the output files when the build is run
-      fileName: "v-date-picker-text-field",
+      fileName: "v-text-field-date-picker",
     },
     rollupOptions: {
       // Make sure to exclude Vue from the bundle
